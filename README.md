@@ -1,9 +1,11 @@
-# Whispr API
+# ![redfoxTracker](public/icons/title.png) redfoxTracker
 ## Badges
 ![GitHub language count](https://img.shields.io/github/languages/count/caeldeth/redfoxtracker?style=plastic)
 ![Lines of code](https://img.shields.io/tokei/lines/github/caeldeth/redfoxtracker?style=plastic)
 ![GitHub package.json dependency version (prod)](https://img.shields.io/github/package-json/dependency-version/caeldeth/redfoxtracker/express?style=plastic)
 ![GitHub package.json dependency version (prod)](https://img.shields.io/github/package-json/dependency-version/caeldeth/redfoxtracker/mongoose?style=plastic)
+![GitHub package.json dependency version (prod)](https://img.shields.io/github/package-json/dependency-version/caeldeth/redfoxtracker/compression?style=plastic)
+![GitHub package.json dependency version (prod)](https://img.shields.io/github/package-json/dependency-version/caeldeth/redfoxtracker/morgan?style=plastic)
 ![GitHub database](https://img.shields.io/badge/database-MongoDB-green?style=plastic&logo=mongodb)
 ![GitHub](https://img.shields.io/github/license/caeldeth/redfoxtracker?style=plastic)
 
@@ -13,10 +15,10 @@
   - [Usage](#usage)
   - [Contributing](#contributing)
   - [Questions](#questions)
-  - [Walkthrough](#walkthrough)
+  - [Application](#application)
 
 ## Description
-Redfoxtracker is .
+redfoxTracker is a budget tracking progressive web app.  With offline functionality, you can enter budget transactions regardless of internet connection.
 
 ## Usage
 To use this application locally, you must have:
@@ -35,4 +37,5 @@ If you have any questions on this project:
 
 Visit my [profile](https://github.com/Caeldeth) to see more great projects!
   
-## Walkthrough
+## Application
+Visit redfoxTracker [here](https://vast-plateau-01803.herokuapp.com/).
