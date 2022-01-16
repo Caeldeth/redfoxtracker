@@ -1,26 +1,28 @@
-// set up variable for idb connection
-let idb;
+// set up variable for db connection
+let db;
 
-// connect to idb, name db budget_tracker, start at version 1
-const request = indexedDB.open('budget_tracker', 1);
+// connect to db, name db budget_tracker, start at version 1
+const request = indexedDB.open('budget_tracker', 3);
 
 // check for db version changes
 request.onupgradedneeded = function(event) {
     // save a reference to the db
-    const idb = event.target.result;
+    const db = event.target.result;
+    console.log('upgrade needed called');
 
     // create new table and give autoincrement pk
-    idb.createObjectStore('new_tx', { autoIncrement: true });
+    db.createObjectStore("new_transaction");
+//    db.createObjectStore("new_transaction", { autoIncrement: true });
 };
 
 request.onsuccess = function(event) {
     // if db created or connected, save reference in global vars
-    idb = event.target.result;
+    db = event.target.result;
 
     // check if app is online - if yes, upload local db
-    if (navigator.online) {
+    if (navigator.onLine) {
         // actually call upload
-        uploadTx();
+        uploadEntry();
     }
 };
 
@@ -30,30 +32,30 @@ request.onerror = function (event) {
 };
 
 function saveRecord(record) {
-    // ready a transaction to idb
-    const tx = idb.transaction(['new_tx'], "readwrite");
+    // ready a transaction to db
+    const transaction = db.transaction(["new_transaction"], "readwrite").objectStore('new_transaction');
 
     // access objectstore
-    const budgetOS = tx.objectStore('new_tx');
+    const entryObjectStore = transaction.objectStore("new_transaction");
 
     // add record
-    budgetOS.add(record);
+    entryObjectStore.add(record);
 }
 
-function uploadTx() {
-    // ready a transaction to idb
-    const tx = idb.transaction(['new_tx'], "readwrite");
+function uploadEntry() {
+    // ready a transaction to db
+    const transaction = db.transaction(["new_transaction"], "readwrite").objectStore('new_transaction');
 
     // access objectstore
-    const budgetOS = tx.objectStore('new_tx');
+    const entryObjectStore = transaction.objectStore("new_transaction");
 
-    // get all records from idb
-    const getAll = budgetOS.getAll();
+    // get all records from db
+    const getAll = entryObjectStore.getAll();
 
     // promise to send records to server
     getAll.onsuccess = function () {
         if (getAll.results.length > 0) {
-            fetch(`/api/transaction/bulk`, {
+            fetch('/api/transaction/bulk', {
                 method: "POST",
                 body: JSON.stringify(getAll.result),
                 headers: {
@@ -66,8 +68,8 @@ function uploadTx() {
                     if(serverResponse.message) {
                         throw new Error(serverResponse);
                     }
-                    const tx = idb.transaction(['new_tx'], "readwrite"); 
-                    const budgetOS = tx.objectStore('new_tx');
+                    const trans = db.transaction(["new_transaction"], "readwrite").objectStore('new_transaction'); 
+                    const budgetObjStore = trans.objectstore("new_transaction");
                     store.clear();
                 });
         }
@@ -75,4 +77,4 @@ function uploadTx() {
 }
 
 // check to see if app is online
-window.addEventListener('online', uploadTx);
+window.addEventListener('online', uploadEntry);
